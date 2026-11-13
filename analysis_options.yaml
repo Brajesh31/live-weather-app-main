@@ -1,0 +1,4 @@
+analyzer:
+  exclude:
+    # Legacy scratch program is not part of the application.
+    - scratch.dart
