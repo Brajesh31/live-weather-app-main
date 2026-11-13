@@ -8,6 +8,13 @@ const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 class WeatherModel {
   Future<dynamic> getCityWeather(String cityName) async {
+    if (apiKey.isEmpty) {
+      throw StateError(
+        'Missing OpenWeatherMap API key. '
+        'Pass --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY.',
+      );
+    }
+
     final encodedCity = Uri.encodeQueryComponent(cityName);
     final networkHelper = NetworkHelper(
       '$openWeatherMapURL?q=$encodedCity&appid=$apiKey&units=metric',
