@@ -10,7 +10,6 @@ build/
 android/.gradle/
 android/local.properties
 android/key.properties
-**/gradle-wrapper.jar
 
 # iOS / Xcode
 ios/Pods/
@@ -20,6 +19,15 @@ ios/Flutter/Generated.xcconfig
 ios/Flutter/flutter_export_environment.sh
 *.xcworkspace/
 *.xcodeproj/project/
+
+# Local secrets and signing material
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
 
 # IDE and OS
 .idea/

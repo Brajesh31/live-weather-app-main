@@ -1,126 +1,147 @@
 # Clima Weather
 
-A Flutter weather app that shows current conditions for the user's location or a city entered manually. It retrieves current weather from the OpenWeatherMap Current Weather API and presents the temperature, condition icon, city name, and a short weather-based suggestion.
+Clima is a Flutter mobile application for viewing current weather conditions. It can request weather for the device's approximate location or for a city entered by the user. The app uses the OpenWeatherMap Current Weather API and presents the temperature in Celsius, a condition emoji, the city name and a temperature-based suggestion.
 
-<p align="center">
-  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-mobile%20app-02569B?logo=flutter&logoColor=white">
-  <img alt="Dart" src="https://img.shields.io/badge/Dart-2.x-0175C2?logo=dart&logoColor=white">
-  <img alt="License" src="https://img.shields.io/badge/License-MIT-green.svg">
-  <img alt="Platform" src="https://img.shields.io/badge/Platforms-Android%20%7C%20iOS-informational">
-</p>
+This repository is a learning project built around a simple Flutter screen/service separation. It is not a production weather platform and does not provide forecasts, accounts, saved locations, offline caching or a backend.
 
-## Features
+## Capabilities
 
-- Fetch current weather using the device's location.
+- Retrieve current weather using the device's location.
 - Search for current weather by city name.
 - Display temperature in Celsius.
-- Map weather condition codes to emoji icons.
-- Show a short suggestion based on the current temperature.
-- Use separate loading, location, and city-search screens.
+- Convert OpenWeatherMap condition identifiers into emoji.
+- Show a short clothing or activity suggestion based on temperature.
+- Use distinct loading, location-weather and city-search screens.
+- Support Android and iOS project scaffolding.
 
-> This project currently displays **current weather only**. It does not implement hourly or multi-day forecasts.
+The app currently requests current conditions only. Hourly forecasts, daily forecasts, weather alerts, historical weather and background updates are not implemented.
 
-## Technology
+## Technology and dependencies
 
-- Flutter and Dart
-- OpenWeatherMap Current Weather API
-- `geolocator` for device location
-- `http` for API requests
-- `flutter_spinkit` for the loading indicator
+| Technology | Purpose |
+|---|---|
+| Flutter | Cross-platform application UI and runtime |
+| Dart | Application language |
+| geolocator 3.0.1 | Device location lookup |
+| http 0.12.0+2 | HTTP requests to the weather provider |
+| flutter_spinkit 3.1.0 | Loading animation |
+| OpenWeatherMap Current Weather API | Weather data source |
+
+The dependency versions are intentionally documented as they exist in the current project manifest. They are old and should be upgraded as a separate compatibility task, not blindly replaced during a documentation change.
 
 ## Requirements
 
-- Flutter SDK compatible with the Dart constraint in `pubspec.yaml` (Dart 2.x)
-- Android Studio or Xcode for device builds
-- An OpenWeatherMap API key
-- A device or emulator with location services enabled for location-based weather
+- Flutter SDK with Dart 2.x compatible with the SDK constraint in pubspec.yaml.
+- Android Studio and Android SDK for Android builds.
+- Xcode and CocoaPods for iOS builds on macOS.
+- An OpenWeatherMap API key.
+- A physical device or emulator for location-permission testing.
 
-## Run locally
+## Quick start
 
-1. Clone the repository:
+Clone the repository and enter its directory:
 
-   ```bash
-   git clone https://github.com/Brajesh31/live-weather-app-main.git
-   cd live-weather-app-main
-   ```
+    git clone https://github.com/Brajesh31/live-weather-app-main.git
+    cd live-weather-app-main
 
-2. Install Flutter dependencies:
+Install the Dart and Flutter packages:
 
-   ```bash
-   flutter pub get
-   ```
+    flutter pub get
 
-3. Supply your API key at run time. Do not put a real key in source control:
+Provide the OpenWeatherMap key at run time:
 
-   ```bash
-   flutter run --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
-   ```
+    flutter run --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
 
-   For a release build, pass the same define to the relevant build command, for example:
+For an Android APK:
 
-   ```bash
-   flutter build apk --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
-   ```
+    flutter build apk --release --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
 
-4. Launch the app on a connected device or emulator.
+For an Android app bundle:
 
-The key is compiled into a client application and can be extracted from a distributed binary. Restrict it in the OpenWeatherMap dashboard where possible, monitor its usage, and never reuse a privileged server-side key in a mobile app.
+    flutter build appbundle --release --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
 
-## Project structure
+For iOS, run the build on macOS with Xcode configured:
 
-```text
-lib/
-├── main.dart
-├── screens/
-│   ├── loading_screen.dart
-│   ├── location_screen.dart
-│   └── city_screen.dart
-├── services/
-│   ├── location.dart
-│   ├── networking.dart
-│   └── weather.dart
-└── utilities/
-    └── constants.dart
-images/       # Screen backgrounds
-fonts/        # App font assets
-android/      # Android runner and platform configuration
-ios/          # iOS runner and platform configuration
-```
+    flutter build ios --release --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
+
+Do not paste a real key into Dart source, commit it in a configuration file, or place it in a public issue. A key supplied with a Dart compile-time define is still embedded in the client binary and can be extracted. Restrict the key at the provider, monitor usage and rotate any key that was previously exposed. A backend proxy is the stronger option when provider policy and app distribution require secret protection.
+
+## Configuration
+
+The application reads the key through the OPENWEATHER_API_KEY compile-time environment value. If it is absent, the weather service throws a StateError explaining how to provide it.
+
+The app does not currently have a separate dotenv loader, remote configuration service or server-side credential store. Do not create a committed .env file as a substitute for the documented Dart define.
 
 ## Application flow
 
-```mermaid
-flowchart TD
-    A[Launch app] --> B[Loading screen]
-    B --> C[Read device location]
-    C --> D[Request current weather]
-    D --> E[Location weather screen]
-    E --> F{User action}
-    F -->|Refresh location| C
-    F -->|Search city| G[City search screen]
-    G --> H[Request city weather]
-    H --> E
-```
+1. The app starts in the loading screen.
+2. The loading screen asks the location service for the current device position.
+3. The weather service builds a current-weather request using latitude and longitude.
+4. The networking helper sends the HTTP GET request and decodes a successful JSON response.
+5. The location screen maps the response into temperature, condition icon, city and message.
+6. The user can refresh location weather or open the city search screen.
+7. A submitted city name is URL-encoded and sent to the same current-weather endpoint.
 
-## API and permissions
+See the architecture, API and location-permissions documents in the docs directory for implementation details and limitations.
 
-The app calls the OpenWeatherMap Current Weather endpoint. Location-based weather requires location permission on the device. If permission is denied or the API request fails, the current implementation may not recover gracefully. Check platform permission configuration and network access when troubleshooting.
+## Repository layout
 
-## Known limitations
+    lib/
+      main.dart
+      screens/
+        loading_screen.dart
+        location_screen.dart
+        city_screen.dart
+      services/
+        location.dart
+        networking.dart
+        weather.dart
+      utilities/
+        constants.dart
+    docs/
+    images/
+    fonts/
+    android/
+    ios/
+    test/
 
-- No forecast, saved cities, offline mode, or automated test suite is currently included.
-- The project uses older Flutter/Dart dependencies and APIs. Upgrade the SDK and dependencies deliberately before adopting newer Flutter tooling.
-- Network and location error handling should be strengthened before production release.
-- The API key must be supplied through `--dart-define`; the previous hardcoded key has been removed from the source. Rotate the previously exposed key.
+The Android and iOS directories contain native runner projects. The images and fonts directories contain local presentation assets. Generated build output and machine-specific SDK paths do not belong in source control.
+
+## Validation
+
+Install dependencies and run static analysis:
+
+    flutter pub get
+    flutter analyze
+
+Run the automated test suite:
+
+    flutter test
+
+The automated tests cover the deterministic weather-condition and temperature-message mappings. They do not test live API calls, device location providers, permission prompts or native platform builds. Those require manual or platform-specific integration testing.
+
+## Known limitations and technical debt
+
+- Only current weather is displayed.
+- Location failures are not yet represented by a dedicated recoverable UI state.
+- Network failures and non-200 API responses are not handled through a typed result model.
+- The current weather service and networking helper do not implement request timeouts or retry policy.
+- The app uses legacy Flutter and Dart dependencies.
+- The Android project uses the deprecated Android embedding and old Gradle/Android plugin configuration.
+- Android target SDK and compile SDK values are old and require a planned platform migration.
+- The app has no offline cache, saved cities, forecast view or automated integration tests.
+- The compile-time API key is extractable from a distributed mobile binary.
+
+These limitations are recorded rather than hidden. See docs/TROUBLESHOOTING.md and docs/DEPLOYMENT.md before attempting a production release.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Bug reports and focused improvements are welcome.
+Read CONTRIBUTING.md before submitting a change. Keep pull requests focused, describe visible behavior changes and include the validation commands you ran.
 
 ## Security
 
-Do not commit API keys, credentials, personal data, or signing files. See [SECURITY.md](SECURITY.md).
+Read SECURITY.md. Never commit API keys, signing credentials, private user data or machine-specific local configuration.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE).
+Distributed under the MIT License. See LICENSE.
