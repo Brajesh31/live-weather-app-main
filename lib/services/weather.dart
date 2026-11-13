@@ -1,27 +1,38 @@
 import 'package:clima/services/location.dart';
 import 'package:clima/services/networking.dart';
 
-const apiKey = 'cf9e34db7d69d93712a4467f2cb5bcc9';
+/// Supply the key at build/run time with:
+/// flutter run --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
+const apiKey = String.fromEnvironment('OPENWEATHER_API_KEY');
 const openWeatherMapURL = 'https://api.openweathermap.org/data/2.5/weather';
 
 class WeatherModel {
   Future<dynamic> getCityWeather(String cityName) async {
-    NetworkHelper networkHelper = NetworkHelper(
-        '$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric');
+    final encodedCity = Uri.encodeQueryComponent(cityName);
+    final networkHelper = NetworkHelper(
+      '$openWeatherMapURL?q=$encodedCity&appid=$apiKey&units=metric',
+    );
 
-    var weatherData = await networkHelper.getData();
-    return weatherData;
+    return networkHelper.getData();
   }
 
   Future<dynamic> getLocationWeather() async {
-    Location location = Location();
+    if (apiKey.isEmpty) {
+      throw StateError(
+        'Missing OpenWeatherMap API key. '
+        'Pass --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY.',
+      );
+    }
+
+    final location = Location();
     await location.getCurrentLocation();
 
-    NetworkHelper networkHelper = NetworkHelper(
-        '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
+    final networkHelper = NetworkHelper(
+      '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}'
+      '&appid=$apiKey&units=metric',
+    );
 
-    var weatherData = await networkHelper.getData();
-    return weatherData;
+    return networkHelper.getData();
   }
 
   String getWeatherIcon(int condition) {
@@ -46,11 +57,11 @@ class WeatherModel {
 
   String getMessage(int temp) {
     if (temp > 25) {
-      return 'It\'s 🍦 time';
+      return "It's 🍦 time";
     } else if (temp > 20) {
       return 'Time for shorts and 👕';
     } else if (temp < 10) {
-      return 'You\'ll need 🧣 and 🧤';
+      return "You'll need 🧣 and 🧤";
     } else {
       return 'Bring a 🧥 just in case';
     }

@@ -1,143 +1,126 @@
-<p align="center">
-  <a href="https://live-weather-app-main.vercel.app/">
-    <img src="https://raw.githubusercontent.com/Brajesh31/asset/main/live-weather-banner.png" alt="Live Weather App Banner">
-  </a>
-</p>
+# Clima Weather
 
-<div align="center">
-
-# 🌤️ Live Weather Web App 🌦️
-
-**A clean, responsive, and real-time weather web application that provides current weather data and forecasts for any location.**
-
-</div>
+A Flutter weather app that shows current conditions for the user's location or a city entered manually. It retrieves current weather from the OpenWeatherMap Current Weather API and presents the temperature, condition icon, city name, and a short weather-based suggestion.
 
 <p align="center">
-  <a href="https://live-weather-app-main.vercel.app/">
-    <img src="https://img.shields.io/badge/Vercel-Visit_Live_Demo-black?style=for-the-badge&logo=vercel" alt="Deployment">
-  </a>
-  &nbsp;
-  <img src="https://img.shields.io/github/stars/Brajesh31/live-weather-app-main?style=for-the-badge&color=gold" alt="Stars">
-  &nbsp;
-  <img src="https://img.shields.io/github/last-commit/Brajesh31/live-weather-app-main?style=for-the-badge&color=blue" alt="Last Commit">
-  &nbsp;
-  <img src="https://img.shields.io/github/license/Brajesh31/live-weather-app-main?style=for-the-badge&color=green" alt="License">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-mobile%20app-02569B?logo=flutter&logoColor=white">
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-2.x-0175C2?logo=dart&logoColor=white">
+  <img alt="License" src="https://img.shields.io/badge/License-MIT-green.svg">
+  <img alt="Platform" src="https://img.shields.io/badge/Platforms-Android%20%7C%20iOS-informational">
 </p>
 
----
+## Features
 
-## 🌟 About The Project
+- Fetch current weather using the device's location.
+- Search for current weather by city name.
+- Display temperature in Celsius.
+- Map weather condition codes to emoji icons.
+- Show a short suggestion based on the current temperature.
+- Use separate loading, location, and city-search screens.
 
-This project is a modern, web-based weather application that allows users to get instantaneous weather information for cities worldwide. The interface is designed to be fully responsive, providing a seamless and beautiful experience on both desktop and mobile devices.
+> This project currently displays **current weather only**. It does not implement hourly or multi-day forecasts.
 
-> The app leverages a powerful, free weather API to fetch real-time data, including temperature, humidity, wind speed, and multi-day forecasts. The goal was to create a fast, elegant, and easy-to-use tool for checking the weather anytime, anywhere.
+## Technology
 
-<br>
+- Flutter and Dart
+- OpenWeatherMap Current Weather API
+- `geolocator` for device location
+- `http` for API requests
+- `flutter_spinkit` for the loading indicator
 
-## ✨ Core Features
+## Requirements
 
-* **⚡ Real-time Weather Data:** Instantly fetches and displays current weather conditions.
-* **🌍 Global Search:** Find weather information for any city in the world with predictive search.
-* **📱 Fully Responsive Design:** Looks and works great on any screen size, from mobile phones to desktops.
-* **📍 Geolocation:** Automatically determines the user's location to provide local weather with a single click.
-* **📅 Multi-Day Forecast:** Provides a detailed summary of the weather for the upcoming days.
+- Flutter SDK compatible with the Dart constraint in `pubspec.yaml` (Dart 2.x)
+- Android Studio or Xcode for device builds
+- An OpenWeatherMap API key
+- A device or emulator with location services enabled for location-based weather
 
-<br>
+## Run locally
 
-## 🛠️ Built With
+1. Clone the repository:
 
-This project was built with a modern and powerful frontend stack. The logos below are links to their respective documentation.
+   ```bash
+   git clone https://github.com/Brajesh31/live-weather-app-main.git
+   cd live-weather-app-main
+   ```
 
-| Technology                                                                                                                              | Description                                        |
-| --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| [![React][React.js]][React-url]                                                                                                         | A JavaScript library for building user interfaces. |
-| [![Vite][Vite.js]][Vite-url]                                                                                                             | A next-generation frontend tooling.                |
-| [![TailwindCSS][TailwindCSS.com]][TailwindCSS-url]                                                                                       | A utility-first CSS framework for rapid UI design. |
-| [![Vercel][Vercel.com]][Vercel-url]                                                                                                      | The platform used for seamless deployment.         |
-| _... (Confirm the API Provider, e.g., OpenWeatherMap)_                                                                                  | The API providing the weather data.                |
+2. Install Flutter dependencies:
 
-<br>
+   ```bash
+   flutter pub get
+   ```
 
-## 🚀 Getting Started
+3. Supply your API key at run time. Do not put a real key in source control:
 
-To get a local copy up and running for development or testing, follow these simple steps.
+   ```bash
+   flutter run --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
+   ```
 
-### ✅ Prerequisites
+   For a release build, pass the same define to the relevant build command, for example:
 
-Make sure you have Node.js and npm (or yarn) installed on your machine.
+   ```bash
+   flutter build apk --dart-define=OPENWEATHER_API_KEY=YOUR_API_KEY
+   ```
 
-* **Node.js** (v16.x or later recommended)
-* **npm**
-    ```sh
-    npm install npm@latest -g
-    ```
+4. Launch the app on a connected device or emulator.
 
-### ⚙️ Installation & Setup
+The key is compiled into a client application and can be extracted from a distributed binary. Restrict it in the OpenWeatherMap dashboard where possible, monitor its usage, and never reuse a privileged server-side key in a mobile app.
 
-1.  **Clone the repository:**
-    ```sh
-    git clone [https://github.com/Brajesh31/live-weather-app-main.git](https://github.com/Brajesh31/live-weather-app-main.git)
-    ```
-2.  **Navigate to the project directory:**
-    ```sh
-    cd live-weather-app-main
-    ```
-3.  **Install dependencies:**
-    ```sh
-    npm install
-    ```
-4.  **Set up environment variables:**
-    * This project requires an API key to fetch weather data. Create a `.env` file in the root of the project by copying the example file:
-        ```sh
-        cp .env.example .env
-        ```
-    * Sign up for a free API key at **[Name of Weather API Provider, e.g., OpenWeatherMap]**.
-    * Open your new `.env` file and add your API key. *(Please confirm the exact variable name, e.g., `VITE_API_KEY`)*.
-        ```
-        VITE_API_KEY="YOUR_API_KEY_HERE"
-        ```
+## Project structure
 
-5.  **Launch the development server:**
-    ```sh
-    npm run dev
-    ```
-    Now, open `http://localhost:5173` (or the address shown in your terminal) in your browser.
+```text
+lib/
+├── main.dart
+├── screens/
+│   ├── loading_screen.dart
+│   ├── location_screen.dart
+│   └── city_screen.dart
+├── services/
+│   ├── location.dart
+│   ├── networking.dart
+│   └── weather.dart
+└── utilities/
+    └── constants.dart
+images/       # Screen backgrounds
+fonts/        # App font assets
+android/      # Android runner and platform configuration
+ios/          # iOS runner and platform configuration
+```
 
-<br>
+## Application flow
 
-## 🤝 Contributing
+```mermaid
+flowchart TD
+    A[Launch app] --> B[Loading screen]
+    B --> C[Read device location]
+    C --> D[Request current weather]
+    D --> E[Location weather screen]
+    E --> F{User action}
+    F -->|Refresh location| C
+    F -->|Search city| G[City search screen]
+    G --> H[Request city weather]
+    H --> E
+```
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+## API and permissions
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement". Don't forget to give the project a star! Thanks again!
+The app calls the OpenWeatherMap Current Weather endpoint. Location-based weather requires location permission on the device. If permission is denied or the API request fails, the current implementation may not recover gracefully. Check platform permission configuration and network access when troubleshooting.
 
-1.  Fork the Project
-2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3.  Commit your Changes (`git commit -m 'feat: Add some AmazingFeature'`)
-4.  Push to the Branch (`git push origin feature/AmazingFeature`)
-5.  Open a Pull Request
+## Known limitations
 
----
+- No forecast, saved cities, offline mode, or automated test suite is currently included.
+- The project uses older Flutter/Dart dependencies and APIs. Upgrade the SDK and dependencies deliberately before adopting newer Flutter tooling.
+- Network and location error handling should be strengthened before production release.
+- The API key must be supplied through `--dart-define`; the previous hardcoded key has been removed from the source. Rotate the previously exposed key.
 
-## 📜 License
+## Contributing
 
-Distributed under the MIT License. See `LICENSE` file for more information.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Bug reports and focused improvements are welcome.
 
----
+## Security
 
-## 📬 Contact
+Do not commit API keys, credentials, personal data, or signing files. See [SECURITY.md](SECURITY.md).
 
-Brajesh - [@Brajesh31 on GitHub](https://github.com/Brajesh31)
+## License
 
-Project Link: [https://github.com/Brajesh31/live-weather-app-main](https://github.com/Brajesh31/live-weather-app-main)
-
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
-[Vite-url]: https://vitejs.dev/
-[TailwindCSS.com]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
-[TailwindCSS-url]: https://tailwindcss.com/
-[Vercel.com]: https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white
-[Vercel-url]: https://vercel.com/
-
-Last updated: 2026-11-13 17:29 UTC
+This project is licensed under the MIT License. See [LICENSE](LICENSE).
